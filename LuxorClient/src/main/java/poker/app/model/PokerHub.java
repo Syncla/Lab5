@@ -1,12 +1,6 @@
 package poker.app.model;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import exceptions.DeckException;
 import netgame.common.Hub;
@@ -14,11 +8,9 @@ import pokerBase.Action;
 import pokerBase.Card;
 import pokerBase.Deck;
 import pokerBase.GamePlay;
-import pokerBase.GamePlayPlayerHand;
 import pokerBase.Player;
 import pokerBase.Rule;
 import pokerBase.Table;
-import pokerEnums.eAction;
 import pokerEnums.eGame;
 import pokerEnums.eGameState;
 
@@ -37,7 +29,7 @@ public class PokerHub extends Hub {
 	protected void playerConnected(int playerID) {
 
 		if (playerID == 2) {
-			shutdownServerSocket();
+			//shutdownServerSocket();
 		}
 	}
 
@@ -72,13 +64,13 @@ public class PokerHub extends Hub {
 				//System.out.println("Starting Game!");
 				resetOutput();
 				
-				//TODO - Lab #5 Do all the things you need to do to start a game!!
+				//TODO- sorry for accidentally deleting the todo
 				
 				//	Determine which game is selected (from RootTableController)
-				//		1 line of code
+				eGame game=act.geteGame();
 				
 				//	Get the Rule based on the game selected
-				//		1 line of code
+				Rule rle = new Rule(act.geteGame());
 
 			
 				//	The table should eventually allow multiple instances of 'GamePlay'...
@@ -86,19 +78,20 @@ public class PokerHub extends Hub {
 				//		For the first instance of GamePlay, pick a random player to be the 
 				//		'Dealer'...  
 				//		< 5 lines of code to pick random player
-				
+				Player dealer = HubPokerTable.PickRandomPlayerAtTable();
 				
 				//	Start a new instance of GamePlay, based on rule set and Dealer (Player.PlayerID)
 				//		1 line of code
-				
+				GamePlay HubGamePlay = new GamePlay(rle,dealer.getPlayerID());
 				
 				//	There are 1+ players seated at the table... add these players to the game
-				//		< 5 lines of code
+				HubGamePlay.setGamePlayers(HubPokerTable.getHashPlayers());
 				
 				//	GamePlay has a deck...  create the deck based on the game's rules (the rule
 				//		will have number of jokers... wild cards...
 				//		1 line of code
-
+				HubGamePlay.setGameDeck(new Deck(rle.GetNumberOfJokers(),rle.GetWildCards()));
+				
 				//	Determine the order of players and add each player in turn to GamePlay.lnkPlayerOrder
 				//	Example... four players playing...  seated in Position 1, 2, 3, 4
 				//			Dealer = Position 2
@@ -107,10 +100,23 @@ public class PokerHub extends Hub {
 				//			Dealer = Position 4
 				//			Order should be 1, 2, 4
 				//		< 10 lines of code
-				
-				
+				int[] positions = new int[4];
+				int pos = dealer.getiPlayerPosition();
+				pos++;
+				if (pos==5){
+					pos=1;
+				}
+				for (int i=0;i<4;i++){
+					positions[i]=pos;
+					pos++;
+					if (pos==5){
+						pos=1;
+					}
+				}
+				HubGamePlay.setiActOrder(positions);
 				//	Set PlayerID_NextToAct in GamePlay (next player after Dealer)
 				//		1 line of code
+				HubGamePlay.setPlayerNextToAct(HubGamePlay.getPlayerByPosition(HubGamePlay.getiActOrder()[0]));
 				
 
 				//	Send the state of the game back to the players
@@ -130,7 +136,7 @@ public class PokerHub extends Hub {
 						e.printStackTrace();
 					}
 				}
-*/
+				*/
 				break;
 			}
 		}

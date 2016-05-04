@@ -69,7 +69,28 @@ public class RootLayoutController implements Initializable {
 		
 		return strRuleID;
 	}
-	
+	public String getBetRule(){
+		String betRule=null;
+		for (Menu m: mb.getMenus())
+		{
+			if (m.getText() == "Betting Rules")
+			{
+				for (MenuItem mi: m.getItems())
+				{
+					if (mi.getClass().equals(RadioMenuItem.class))
+					{
+						RadioMenuItem rmi = (RadioMenuItem)mi;
+						if (rmi.isSelected() == true)
+						{
+							betRule = rmi.getId();
+							break;
+						}
+					}
+				}
+			}
+		}
+		return betRule;
+	}
 	public void initialize(URL location, ResourceBundle resources) {
 
 		BuildMenus();
@@ -97,6 +118,23 @@ public class RootLayoutController implements Initializable {
 			mnuGame.getItems().add(rmi);
 		}
 		
+		ToggleGroup tglBetLimit = new ToggleGroup();
+		
+		
+		Menu bl = new Menu();
+		bl.setText("Betting Rules");
+		mb.getMenus().add(1,bl);
+		RadioMenuItem rmi = new RadioMenuItem("No Limit");
+		rmi.setId("PokerGameNoLimit");
+		rmi.setToggleGroup(tglBetLimit);
+		rmi.setSelected(true);
+		bl.getItems().add(rmi);
+		rmi=null;
+		rmi = new RadioMenuItem("Pot Limit");
+		rmi.setId("PokerGamePotLimit");
+		rmi.setToggleGroup(tglBetLimit);
+		bl.getItems().add(rmi);
+		
 
 		
 		//	TODO - Lab #5...  Add a new menu item that will display the betting rules...
@@ -105,7 +143,7 @@ public class RootLayoutController implements Initializable {
 		//	Pot Limit (this is NOT the default)
 		//	Group them together with a Toggle Group
 		//	Write a method to return which is selected.. .check out getRuleName()
-
+        
 	}
     
 	

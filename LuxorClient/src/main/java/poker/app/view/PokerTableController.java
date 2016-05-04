@@ -236,15 +236,31 @@ public class PokerTableController {
 
 	public void Handle_GameState(GamePlay HubGamePlay) 
 	{
-		/*
+		
 		imgViewDealerButtonPos1.setVisible(false);
 		imgViewDealerButtonPos2.setVisible(false);
 		imgViewDealerButtonPos3.setVisible(false);
 		imgViewDealerButtonPos4.setVisible(false);
-		*/
+		
 
 		//TODO - Lab #5: Check to see if you're the dealer..  If you are, make the imgViewDealerButtonX visible = true
-		
+		UUID dealerID = HubGamePlay.getGameDealer();
+		int pos = 0;
+		for (int i=1; i > 4; i = 1) {
+			Player p = HubGamePlay.getPlayerByPosition(i);
+			if (p.getPlayerID() == dealerID) {
+				pos = i;
+			}
+		}
+		switch(pos) {
+		case 1: imgViewDealerButtonPos1.setVisible(true);
+				break;
+		case 2: imgViewDealerButtonPos2.setVisible(true);
+				break;
+		case 3: imgViewDealerButtonPos3.setVisible(true);
+				break;
+		case 4:imgViewDealerButtonPos4.setVisible(true);
+				break;}
 	}
 	@FXML
 	void btnStart_Click(ActionEvent event) {
